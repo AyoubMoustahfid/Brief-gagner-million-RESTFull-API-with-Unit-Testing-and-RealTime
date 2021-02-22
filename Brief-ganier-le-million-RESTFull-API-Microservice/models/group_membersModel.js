@@ -3,17 +3,19 @@ const {ObjectId} = require('mongodb')
 
 const groupMemberSchema = new mongoose.Schema({
     participant: {
-          type: ObjectId,
-          ref: 'Participant',
+          type: [{ type : ObjectId, ref: 'Participant' }],
           required: true,
           trim: true
     },
-    group_code: {
-        type: Number,
+    code: {
+        type: ObjectId,
+        ref: "Code",
         required: true,
         trim: true,
         unique: true
     }
 }, {timestamps: true})
+
+
 
 module.exports = mongoose.model('GroupMember', groupMemberSchema)

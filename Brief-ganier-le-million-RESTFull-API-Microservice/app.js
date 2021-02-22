@@ -13,6 +13,10 @@ app.use(cors())
 // all routers
 const authRouter = require('./routers/authRouter')
 const participantRouter = require('./routers/participantRouter')
+const questionRouter = require('./routers/questionRouter')
+const groupMemberRouter = require('./routers/group_memeberRouter')
+const questionTokenRouter = require('./routers/question_tokenRouter')
+const codeRouter = require('./routers/codeRouter')
 
 
 mongoose.connect(process.env.DATABASE, {
@@ -25,6 +29,10 @@ mongoose.connect(process.env.DATABASE, {
 // all use URI
 app.use('/api/', authRouter)
 app.use('/api/participant', participantRouter)
+app.use('/api/question', questionRouter)
+app.use('/api/groupMember', groupMemberRouter)
+app.use('/api/questionToken', questionTokenRouter)
+app.use('/api/code', codeRouter)
 
 
 // run server

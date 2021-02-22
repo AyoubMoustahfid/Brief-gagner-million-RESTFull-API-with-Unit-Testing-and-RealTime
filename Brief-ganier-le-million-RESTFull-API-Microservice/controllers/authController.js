@@ -1,6 +1,9 @@
 const Participant = require('../models/participantModel')
 const jwt = require('jsonwebtoken')
+const nodemailer = require('nodemailer')
 require('dotenv').config()
+const Nexmo = require('nexmo');
+
 
 
 
@@ -29,7 +32,7 @@ exports.singin = (req, res) => {
                 error : "User not found with this email, Please Singup"
             })
         }
-
+        
         if(!participant.authenticate(password)) {
             return res.status(401).json({
                 error: "Email and Password don't mutch !"
@@ -40,9 +43,22 @@ exports.singin = (req, res) => {
             return res.status(401).json({
                 error: "Participant is not valid "
             })
-        }
-        const token  = jwt.sign({_id: participant._id, role: participant.role}, process.env.JWT_SECRET)
+        }else{
 
+            const nexmo = new Nexmo({
+                apiKey: process.env.API_KEY_SMS,
+                apiSecret: process.env.API_SECRET_SMS,
+              });
+
+            const from = 'Admin';
+            const to = '212696396672';
+            const text = `Hello ${participant.username} , Email: ${participant.email} votre compte est activé`;
+
+            nexmo.message.sendSms(from, to, text);
+        }
+
+        const token  = jwt.sign({_id: participant._id, role: participant.role}, process.env.JWT_SECRET)
+        
         res.cookie("token", token, {expire: new Date() + 802600})
         
         const {_id, username, email, role} = participant;
@@ -52,6 +68,7 @@ exports.singin = (req, res) => {
         })
     })
 }
+
 
 
 
