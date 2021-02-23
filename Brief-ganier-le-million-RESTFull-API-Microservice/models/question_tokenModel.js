@@ -19,8 +19,21 @@ const questionTokenSchema = new mongoose.Schema({
          ref: 'Participant',
          required: true,
          trim: true
-     }
+     },
+       score: {
+        type: Number,
+        default: 0,
+        required: true,
+        trim: true
+    }
 }, {timestamps: true})
 
+
+
+// questionTokenSchema.methods = {
+//     check: function(answer) {
+//         return answer.question.false_choices == participant_answer
+//     }
+// }
 
 module.exports = mongoose.model('QuestionToken', questionTokenSchema)

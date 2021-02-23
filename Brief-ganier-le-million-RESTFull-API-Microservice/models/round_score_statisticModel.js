@@ -9,11 +9,6 @@ const roundScoreStatisticSchema = new mongoose.Schema({
         ref: 'Round',
         required: true,
         trim: true
-    },
-    score: {
-        type: Number,
-        required: true,
-        trim: true
     }
 }, {timestamps: true})
 

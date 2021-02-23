@@ -1,6 +1,5 @@
 const Participant = require('../models/participantModel')
 const jwt = require('jsonwebtoken')
-const nodemailer = require('nodemailer')
 require('dotenv').config()
 const Nexmo = require('nexmo');
 
@@ -52,7 +51,7 @@ exports.singin = (req, res) => {
 
             const from = 'Admin';
             const to = '212696396672';
-            const text = `Hello ${participant.username} , Email: ${participant.email} votre compte est activé`;
+            const text = `Hello ${participant.username} , Email: ${participant.email} votre compte est connected`;
 
             nexmo.message.sendSms(from, to, text);
         }
@@ -71,9 +70,51 @@ exports.singin = (req, res) => {
 
 
 
+exports.validationParticipant = (req, res) => {
+    Participant.findByIdAndUpdate(req.params.id, {is_valid : true})
+               .then(participant => {
+                   if(!participant){
+                       return res.status(404).json({
+                           error: `Participant not found with id: ${req.params.id}`
+                       })
+                   }
+
+                   const nexmo = new Nexmo({
+                      apiKey: process.env.API_KEY_SMS,
+                      apiSecret: process.env.API_SECRET_SMS,
+                  });
+    
+                    const from = 'Admin';
+                    const to = '212696396672';
+                    const text = `Hello ${participant.username} , Email: ${participant.email} votre compte est activé`;
+    
+                nexmo.message.sendSms(from, to, text);
+               }).catch(err => {
+                   if(err){
+                       return res.status(404).json({
+                           error: "participant not found with id " + req.params.id
+                       })
+                   }
+               })
+}
+
+
+
 
 exports.signout = (req, res) => {
-    res.clearCookie("token")
+    const deconnect = res.clearCookie("token")
+    if(deconnect){
+        const nexmo = new Nexmo({
+            apiKey: process.env.API_KEY_SMS,
+            apiSecret: process.env.API_SECRET_SMS,
+        });
+
+          const from = 'Admin';
+          const to = '212696396672';
+          const text = `Hello  votre compte est déconnecté`;
+
+      nexmo.message.sendSms(from, to, text);
+    }
 
     res.json({
         message: 'User is Signout !!'
