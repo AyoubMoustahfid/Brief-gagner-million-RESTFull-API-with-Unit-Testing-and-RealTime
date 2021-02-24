@@ -8,11 +8,10 @@ const giftSchema = new mongoose.Schema({
         required: true,
         trim : true
     },
-    image: {
-        type: String,
-        required: true,
-         trim : true
-    }
+    photo: {
+        data: Buffer,
+        contentType: String
+    },
 }, {timestamps: true})
 
 

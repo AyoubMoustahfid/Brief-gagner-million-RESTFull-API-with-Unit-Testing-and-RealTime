@@ -32,7 +32,7 @@ async function checkQuestionToken1(id){
     try{
           const checkId = await QuestionToken.findById(id)
 
-          return checkId.participant_answer
+          return checkId.participantanswer
       }catch(err){
           console.log(err);
       }
@@ -85,18 +85,19 @@ exports.createRound = async (req, res) => {
             })
         }
 
-      var reponce = await checkQuestion1(round.question)
-      var sendReponce = await checkQuestionToken1(round.question_token)
+      const reponce = await checkQuestion1(round.question)
+      const sendReponce = await checkQuestionToken1(round.questiontoken)
       const check = reponce == sendReponce
-       
+    
+      const scoreReponce = await checkScore(round.questiontoken)
+
        if(check){
-            const scoreReponce = await checkScore(round.question_token)
             console.log(`valeur: ${scoreReponce}`);
             return scoreReponce 
        }
 
        
-       const groupMember = await checkGroupMember(round.group_members)
+       const groupMember = await checkGroupMember(round.groupmembers)
        if(groupMember.participant.length < 4){
            return res.status(404).json({
                error: "Please, Vérifier votre groupe est ce que il y'a 4 participant ou non"

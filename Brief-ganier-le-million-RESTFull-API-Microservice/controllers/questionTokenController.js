@@ -41,3 +41,20 @@ exports.allQuestionToken = (req, res) => {
         })
     })
 }
+
+
+exports.questionTokenId = (req, res, next, id) => {
+
+    QuestionToken.findById(id).exec((err, questionToken) => {
+
+        if(err || !questionToken) {
+            return res.status(404).json({
+                error: "Question not found !"
+            })
+        }
+
+        req.questionToken = questionToken;
+        next()
+    })
+
+} 

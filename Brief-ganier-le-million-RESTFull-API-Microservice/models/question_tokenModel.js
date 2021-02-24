@@ -9,7 +9,7 @@ const questionTokenSchema = new mongoose.Schema({
          required: true,
          trim: true
      },
-     participant_answer: {
+     participantanswer: {
          type: String,
          required: true,
          trim : true
@@ -28,12 +28,5 @@ const questionTokenSchema = new mongoose.Schema({
     }
 }, {timestamps: true})
 
-
-
-// questionTokenSchema.methods = {
-//     check: function(answer) {
-//         return answer.question.false_choices == participant_answer
-//     }
-// }
 
 module.exports = mongoose.model('QuestionToken', questionTokenSchema)
