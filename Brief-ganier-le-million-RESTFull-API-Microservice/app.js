@@ -2,6 +2,7 @@ const express = require('express')
 const mongoose = require('mongoose')
 const cookieParser = require('cookie-parser')
 const cors = require("cors")
+const logger = require('./logger')
 
 
 const app = express();
@@ -24,8 +25,8 @@ mongoose.connect(process.env.DATABASE, {
     useCreateIndex: true,
     useNewUrlParser: true,
     useUnifiedTopology: true
-}).then(() => console.log('db is connect'))
-  .catch(err => console.log('not connect to the database'))
+}).then(() => logger.error('db is connect'))
+  .catch(err => logger.error('not connect to the database'))
 
 // all use URI
 app.use('/api/', authRouter)
@@ -40,7 +41,7 @@ app.use('/api/round', roundRouter)
 // run server
 const port = process.env.PORT || 3000;
 app.listen(port, ()  => {
-    console.log(`server is running in port: ${port}`)
+    logger.error(`server is running in port: ${port}`)
 })
 
 

@@ -73,7 +73,7 @@ exports.groupMemberId = (req, res, next, id) => {
 
         if(err || !groupMember) {
             return res.status(404).json({
-                error: "Category not found !"
+                error: "Group Member not found !"
             })
         }
 
