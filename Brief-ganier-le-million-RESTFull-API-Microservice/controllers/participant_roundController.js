@@ -25,6 +25,29 @@ async function checkGroupMember(id){
       }
 }
 
+// function return id participant in document Group Member
+async function checkQuestionToken(id){
+    try{
+          const checkId = await QuestionToken.findOne(id)
+
+          return checkId.score
+      }catch(err){
+          console.log(err);
+      }
+}
+
+async function CheckRoundParticipant (idR, idP) {
+    try{ 
+
+        const checkId = await QuestionToken.findOne({_id: idR}, {$in: idP})
+
+        return checkId
+
+    }catch(err){
+        console.log(err);
+    }
+}
+
 
 
 
@@ -35,14 +58,19 @@ exports.createParticipantRound =(req, res) => {
     
         const  result = await checkGroupMember(participantRound.questiontoken)
 
-        if(!(result.participant = participantRound.participant)){
-              res.status(404).json({
-                  error: "Particiant is undifined"
-              })
-        }
+        // if(!(result.participant = participantRound.participant)){
+        //       res.status(404).json({
+        //           error: "Particiant is undifined"
+        //       })
+        // }
 
         const  resultRound = await checkRound(participantRound.round)
         console.log(resultRound);
+
+        const filtreParticipant = await CheckRoundParticipant(participantRound.questiontoken, participantRound.participant)
+        console.log(JSON.stringify(filtreParticipant[0]));
+        
+        const scoreWinner = await checkQuestionToken(JSON.stringify(filtreParticipant[0]))
 
         
         
