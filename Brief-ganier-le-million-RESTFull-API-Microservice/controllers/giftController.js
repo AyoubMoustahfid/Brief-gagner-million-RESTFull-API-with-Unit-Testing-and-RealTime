@@ -61,7 +61,7 @@ exports.giftById = (req, res, next, id) => {
 
 
 
-exports.allProducts = (req, res) => {
+exports.allGift = (req, res) => {
     Gift.find()
            .select("-photo") //not show url photo in query uri
            .exec((err, gifts) => {

@@ -20,6 +20,7 @@ const questionTokenRouter = require('./routers/question_tokenRouter')
 const codeRouter = require('./routers/codeRouter')
 const roundRouter = require('./routers/roundRouter')
 const participantRoundRouter = require('./routers/participant_roundRouter')
+const giftRouter = require('./routers/giftRouter')
 
 
 mongoose.connect(process.env.DATABASE, {
@@ -38,6 +39,7 @@ app.use('/api/questionToken', questionTokenRouter)
 app.use('/api/code', codeRouter)
 app.use('/api/round', roundRouter)
 app.use('/api/participantRound', participantRoundRouter)
+app.use('/api/gift', giftRouter)
 
 
 // run server
