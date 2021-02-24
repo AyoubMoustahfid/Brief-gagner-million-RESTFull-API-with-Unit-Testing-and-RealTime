@@ -50,7 +50,7 @@ exports.singin = (req, res) => {
               });
 
             const from = 'Admin';
-            const to = '212696396672';
+            const to =  participant.phone;
             const text = `Hello ${participant.username} , Email: ${participant.email} votre compte est connected`;
 
             nexmo.message.sendSms(from, to, text);
