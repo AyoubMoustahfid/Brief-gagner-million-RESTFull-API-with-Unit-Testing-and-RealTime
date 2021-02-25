@@ -12,7 +12,7 @@ const groupMemberSchema = new mongoose.Schema({
         ref: "Code",
         required: true,
         trim: true,
-        unique: true
+       
     }
 }, {timestamps: true})
 

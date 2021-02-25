@@ -16,16 +16,16 @@ async function checkQuestion1(id){
       }
 }
 
-async function checkQuestion2(id){
-    try{
-          const checkId = await Question.findOne(id)
+// async function checkQuestion2(id){
+//     try{
+//           const checkId = await Question.findOne(id)
 
-          return checkId.points
+//           return checkId.points
 
-      }catch(err){
-          console.log(err);
-      }
-}
+//       }catch(err){
+//           console.log(err);
+//       }
+// }
 
 // function return participant_answer and score
 async function checkQuestionToken1(id){
@@ -81,7 +81,7 @@ exports.createRound = async (req, res) => {
          
         if(err) {
             return res.status(400).json({
-                error: 'bad Request !'
+                error: err
             })
         }
 

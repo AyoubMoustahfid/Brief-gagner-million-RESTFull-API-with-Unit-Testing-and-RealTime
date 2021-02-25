@@ -5,31 +5,19 @@ const mongoose = require('mongoose')
 const roundSchema = new mongoose.Schema({
     groupmembers: {
         type: ObjectId,
-        ref: 'GroupMember',
-        required: true,
-        trim: true,
-        unique: true
+        ref: 'GroupMember'
     },
-      participant: {
+    participant: {
         type: ObjectId,
-        ref: 'Participant',
-        required: true,
-        trim: true,
-        unique: true
+        ref: 'Participant'
     },
     question: {
         type: ObjectId,
-        ref: 'Question',
-        required: true,
-        trim: true,
-        unique: true
+        ref: 'Question'
     },
     questiontoken: {
         type: ObjectId,
-        ref: 'QuestionToken',
-        required: true,
-        trim: true,
-        unique: true
+        ref: 'QuestionToken'
     }
 }, {timestamps: true})
 

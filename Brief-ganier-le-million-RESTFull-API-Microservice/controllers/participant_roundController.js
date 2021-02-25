@@ -58,11 +58,11 @@ exports.createParticipantRound =(req, res) => {
     
         const  result = await checkGroupMember(participantRound.questiontoken)
 
-        // if(!(result.participant = participantRound.participant)){
-        //       res.status(404).json({
-        //           error: "Particiant is undifined"
-        //       })
-        // }
+        if(!(result.participant = participantRound.participant)){
+              res.status(404).json({
+                  error: "Particiant is undifined"
+              })
+        }
 
         const  resultRound = await checkRound(participantRound.round)
         console.log(resultRound);
