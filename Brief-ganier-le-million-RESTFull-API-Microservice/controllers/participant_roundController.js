@@ -1,3 +1,4 @@
+const { MessageRequestResponseStatusCode } = require('nexmo')
 const  ParticipantRound = require('../models/participant_roundModel')
 const QuestionToken = require('../models/question_tokenModel')
 const Round = require('../models/roundModel')
@@ -67,12 +68,27 @@ exports.createParticipantRound =(req, res) => {
         const  resultRound = await checkRound(participantRound.round)
         console.log(resultRound);
 
+      
         const filtreParticipant = await CheckRoundParticipant(participantRound.questiontoken, participantRound.participant)
-        console.log(JSON.stringify(filtreParticipant[0]));
+        console.log(JSON.stringify(filtreParticipant));
         
-        const scoreWinner = await checkQuestionToken(JSON.stringify(filtreParticipant[0]))
+        const scoreWinner = await checkQuestionToken(JSON.stringify(filtreParticipant[1]))
+            console.log(scoreWinner);
+            // let round = req.round
 
-        
+            // round.sumscore = scoreWinner
+    
+            // round.save(async (err, result) => {
+            //     if(err){
+            //         return res.status(404).json({
+            //             error: "jzejfzefz"
+            //         })
+            //     }
+    
+            //    await  res.json({
+            //         result: result
+            //     })
+            // })
         
         if(err ){
             return res.status(404).json({

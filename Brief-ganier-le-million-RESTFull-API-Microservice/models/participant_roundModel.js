@@ -24,6 +24,10 @@ const participantRoundSchema = new mongoose.Schema({
         trim: true,
         require: true,
         unique: true
+    },
+    sumscore: {
+        type: Number, 
+        default: 0
     }
 })
 

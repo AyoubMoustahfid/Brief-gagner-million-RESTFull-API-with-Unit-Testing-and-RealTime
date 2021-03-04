@@ -4,14 +4,13 @@ const mongoose = require('mongoose');
 
 const finalWinnerSchema = new mongoose.Schema({
 
-    round: {
-        type: Array,
+    group_member: {
+        type: ObjectId,
         required: true,
         trim: true
     },
     finalScore: {
         type: Number,
-        required: true,
         trim: true
     },
     participant: {

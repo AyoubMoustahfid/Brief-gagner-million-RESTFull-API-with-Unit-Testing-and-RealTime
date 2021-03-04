@@ -1,76 +1,26 @@
 const Round = require('../models/roundModel')
 const Question = require('../models/questionModel')
-const QuestionToken = require('../models/question_tokenModel')
 const GroupMember = require('../models/group_membersModel')
 
-
-
-// function return answer and points
-async function checkQuestion1(id){
+async function checkQuestion(id){
     try{
-          const checkId = await Question.findOne(id)
+        const checkId = await Question.findOne(id)
 
-          return checkId.answer
-      }catch(err){
-          console.log(err);
-      }
+        return checkId.answer
+    }catch(err){
+        console.log(err);
+    }
 }
 
-// async function checkQuestion2(id){
-//     try{
-//           const checkId = await Question.findOne(id)
-
-//           return checkId.points
-
-//       }catch(err){
-//           console.log(err);
-//       }
-// }
-
-// function return participant_answer and score
-async function checkQuestionToken1(id){
-    try{
-          const checkId = await QuestionToken.findById(id)
-
-          return checkId.participantanswer
-      }catch(err){
-          console.log(err);
-      }
-}
-
-// async function checkQuestionToken2(id){
-//     try{
-//           const checkId = await QuestionToken.findById(id)
-//           console.log(checkId);
-//           return checkId;
-        
-//       }catch(err){
-//           console.log(err);
-//       }
-// }
-
-async function checkScore(id){
-    try{
-          const checkId = await QuestionToken.findByIdAndUpdate(id, {score: 10})
-          console.log(checkId);
-          return checkId.score;
-        
-      }catch(err){
-          console.log(err);
-      }
-}
-
-
-// function for check is four participant in group member
 async function checkGroupMember(id){
     try{
-          const group = await GroupMember.findOne(id)
-           return group
-      }catch(err){
-          console.log(err);
-      }
-}
+        const checkId = await GroupMember.findOne(id)
 
+        return checkId.participant
+    }catch(err){
+        console.log(err);
+    }
+}
 
 
 
@@ -84,25 +34,18 @@ exports.createRound = async (req, res) => {
                 error: err
             })
         }
-
-      const reponce = await checkQuestion1(round.question)
-      const sendReponce = await checkQuestionToken1(round.questiontoken)
-      const check = reponce == sendReponce
+        const resultGroupMember = await checkGroupMember(round.groupmembers)
+        if(resultGroupMember.length < 3){
+            return res.status(400).json({
+                error: "Please, Vérifier votre groupe est ce que il y'a 4 participant ou non"
+            })
+        }
     
-      const scoreReponce = await checkScore(round.questiontoken)
-
-       if(check){
-            console.log(`valeur: ${scoreReponce}`);
-            return scoreReponce 
-       }
-
-       
-       const groupMember = await checkGroupMember(round.groupmembers)
-       if(groupMember.participant.length < 4){
-           return res.status(404).json({
-               error: "Please, Vérifier votre groupe est ce que il y'a 4 participant ou non"
-           })
-       }
+        const resultQuestion = await checkQuestion(round.question)
+        if(resultQuestion == round.participant_answer){
+            round.score += 10
+        }
+        
     
 
         res.json({
