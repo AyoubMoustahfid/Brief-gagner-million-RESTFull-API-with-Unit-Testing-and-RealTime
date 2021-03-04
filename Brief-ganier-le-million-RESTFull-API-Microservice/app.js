@@ -16,10 +16,8 @@ const authRouter = require('./routers/authRouter')
 const participantRouter = require('./routers/participantRouter')
 const questionRouter = require('./routers/questionRouter')
 const groupMemberRouter = require('./routers/group_memeberRouter')
-const questionTokenRouter = require('./routers/question_tokenRouter')
 const codeRouter = require('./routers/codeRouter')
 const roundRouter = require('./routers/roundRouter')
-const participantRoundRouter = require('./routers/participant_roundRouter')
 const giftRouter = require('./routers/giftRouter')
 
 
@@ -35,10 +33,10 @@ app.use('/api/', authRouter)
 app.use('/api/participant', participantRouter)
 app.use('/api/question', questionRouter)
 app.use('/api/groupMember', groupMemberRouter)
-app.use('/api/questionToken', questionTokenRouter)
+
 app.use('/api/code', codeRouter)
 app.use('/api/round', roundRouter)
-app.use('/api/participantRound', participantRoundRouter)
+
 app.use('/api/gift', giftRouter)
 
 

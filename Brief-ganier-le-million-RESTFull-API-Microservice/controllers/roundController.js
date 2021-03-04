@@ -40,10 +40,14 @@ exports.createRound = async (req, res) => {
                 error: "Please, Vérifier votre groupe est ce que il y'a 4 participant ou non"
             })
         }
+
+        const minTemp = Math.min(round.createdAt)
     
         const resultQuestion = await checkQuestion(round.question)
-        if(resultQuestion == round.participant_answer){
-            round.score += 10
+        if(minTemp){
+            if(resultQuestion == round.participant_answer){
+                round.score += 10
+            }
         }
         
     
