@@ -7,7 +7,7 @@ const router = express.Router()
 
  
 router.get('/:participantId', allCodes)
-router.post('/create/:participantId', [requireSignIn, isAuth] ,createCode)
+router.post('/create/:participantId' ,createCode)
 
 router.param('/participantId', participantById)
 

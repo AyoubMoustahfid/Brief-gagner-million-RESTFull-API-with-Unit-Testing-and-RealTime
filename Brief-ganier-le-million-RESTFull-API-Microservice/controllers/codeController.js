@@ -12,10 +12,19 @@ exports.createCode = (req, res) => {
                 error: 'bad Request !'
             })
         }
+        // else{
+          
+        //     // res.json({
+        //     //     code: code
+        //     // })
+        // }
 
-        res.json({
-            code
-        })
+         res.status(200).json({
+            status: 'succes',
+            code: code,
+          })
+
+      
     })
 
 }

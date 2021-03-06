@@ -7,16 +7,16 @@ exports.createGroupMember =  (req, res) => {
 
     groupMember.save((err, groupMember) =>  {
         
-      if(err || groupMember.participant.length <= 3){
+      if(err){
            res.status(400).json({
               error: "Group is exists, Change Your group_code, bad Request !"
           })
       }
 
-       res.json({
-        groupMember
-    })
-      
+      res.status(200).json({
+        status: 'succes',
+        groupMember: groupMember,
+      })
      
     })
 
