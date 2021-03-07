@@ -103,18 +103,6 @@ exports.validationParticipant = (req, res) => {
 
 exports.signout = (req, res) => {
     const deconnect = res.clearCookie("token")
-    if(deconnect){
-        const nexmo = new Nexmo({
-            apiKey: process.env.API_KEY_SMS,
-            apiSecret: process.env.API_SECRET_SMS,
-        });
-
-          const from = 'Admin';
-          const to = '212696396672';
-          const text = `Hello  votre compte est déconnecté`;
-
-      nexmo.message.sendSms(from, to, text);
-    }
 
     res.json({
         message: 'User is Signout !!'

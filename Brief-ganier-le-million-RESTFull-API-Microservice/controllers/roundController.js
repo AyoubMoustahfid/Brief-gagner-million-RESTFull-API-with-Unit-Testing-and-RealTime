@@ -1,130 +1,156 @@
-// const Round = require('../models/roundModel')
-// const Question = require('../models/questionModel')
-// const GroupMember = require('../models/group_membersModel')
-
-// async function checkQuestion(id){
-//     try{
-//         const checkId = await Question.findOne(id)
-
-//         return checkId.answer
-//     }catch(err){
-//         console.log(err);
-//     }
-// }
-
-// async function checkGroupMember(id){
-//     try{
-//         const checkId = await GroupMember.findOne(id)
-
-//         return checkId
-//     }catch(err){
-//         console.log(err);
-//     }
-// }
-
-
-
-// exports.createRound = async (req, res) => {
-
-//     const round = new Round(req.body);
-//     const minTemp = Math.min(round.createdAt)
-    
-//     const resultQuestion = await checkQuestion(round.question)
-//     console.log(resultQuestion);
-//     if(minTemp){
-//         if(resultQuestion == round.participant_answer){
-//             round.score += 10
-//         }
-//     }
-
-
-
-//     round.save(async (err, round) => {
-         
-//         if(err) {
-//             return res.status(400).json({
-//                 error: err
-//             })
-//         }
-//         const resultGroupMember = await checkGroupMember(round.groupmembers)
-//         console.log(resultGroupMember);
-//         if(resultGroupMember.participant.length < 3){
-//             return res.status(400).json({
-//                 error: "Please, Vérifier votre groupe est ce que il y'a 4 participant ou non"
-//             })
-//         }
-
-       
-//         res.json({
-//             round: round
-//         })
-//     })
-
-// }
-
-
 const Round = require('../models/roundModel')
 const Question = require('../models/questionModel')
 const GroupMember = require('../models/group_membersModel')
 
 
+ const createRound = async (req, res) => {
 
-async function checkQuestion(id) {
-  try {
+    // check if we have the group and we have  4 players 
+     let id_group = req.params.idGroup
+      await GroupMember.findById(id_group)
+            .then(group => {
+                    if (!group) {
+                            res.json({ error: 'gtoup not found' });
+                    }
+                    if (group.participant.length < 3) {
+                            res.json({ error: ' you need 4 players ... ' });
+                         
+                    }
 
-    const checkId = await Question.findOne(id)
 
-    return checkId
-  }catch(err){
-      console.log(err);
-  }
+
+
+                    let groupmembers = id_group;
+                    let question = req.body.question;
+                    let participant = req.body.participant;
+                    let participant_answer = req.body.participant_answer;
+                    // let score = checkParticipantScore(id_group,id_participant);
+                    (async () => {
+                            let score = await checkParticipantScore(id_group, participant);
+
+                            console.log(score)
+
+                            // console.log(score);
+
+                            // check if the answer is correct then update score 
+                            let a = await checkAnswer(participant_answer, question)
+
+                            if (a == true) {
+                                    score = score + 10;
+                                    console.log(score);
+
+                            }
+
+                    console.log(a);
+                        
+
+
+                            const RoundPush = new Round({
+
+                                groupmembers: groupmembers,
+                                    question: question,
+                                    participant: participant,
+                                    participant_answer: participant_answer,
+                                    score: score,
+
+
+                            });
+
+                            RoundPush
+                                    .save()
+                                    .then((data) => {
+                                            res.send(data);
+                                            res.json("Round  successfully saved")
+
+                                    }).catch((err) => res.status(400).json("Error :" + err));
+                    })()
+            }).catch(err => {
+
+                    return res.status(500).send({
+                            message: "Error retrieving group with id " + id_group
+                    });
+            });
+
+
+
 }
 
-async function checkGroupMember(id) {
-    try {
 
-      const checkId = await GroupMember.findOne(id)
 
-      return checkId
-    }catch(err){
-        console.log(err);
+const checkParticipantNumber = async (req, res) => {
+
+
+    let id_group = req.params.idGroup;
+
+    await GroupMember.findById(id_group)
+            .then(group => {
+                    if (!group) {
+                            res.json({ error: 'gtoup not found' });
+                    }
+                    if (group.participant.length < 3) {
+                            res.json({ error: ' you need 4 players to start ... ' });
+                         
+                    }
+                    res.send(group)
+            }).catch(err => {
+
+                    return res.status(500).send({
+                            message: "Error retrieving group with id " + id_group
+                    });
+            });
+
+
+
+}
+
+
+
+
+async function checkAnswer(participant_answer, question) {
+
+    question = await Question.findById(question)
+    if (question.answer == participant_answer) {
+
+            
+            return true
+            
+    }else{
+            return false
     }
-  }
 
-exports.createRound =  async (req, res) => {
-    const round = new Round(req.body)
-
-    const minTemp = Math.min(round.createdAt)
-    const resultQuestion = await checkQuestion(round.question)
-    console.log(resultQuestion);
-
-
-    if(resultQuestion.answer == round.participant_answer && minTemp){
-        round.score = 10
-    } 
-
-
-    round.save(async(err, round) => {
-        if(err){
-            return res.status(404).json({
-                error: "bad request !"
-            })
-        }
-
-          const resultGroupMember = await checkGroupMember(round.groupMember)
-
-        if(resultGroupMember.participant.length < 3){
-            return res.status(404).json({
-                error: "Check your Group Member !"
-            })
-        }
-
-
-
-
-        res.json({
-            round
-        })
-
-    })
 }
+
+
+
+// check if the paticipant has a score 
+
+async function checkParticipantScore(groupmembers, participant) {
+    let scoreArray = [0];
+    round = await Round.find({
+        groupmembers: groupmembers,
+            partcipant: participant
+    })
+
+    if (round) {
+
+            for (let i = 0; i < round.length; i++) {
+
+                   scoreArray.push(round[i].score)
+                    
+            }
+
+           
+
+            return Math.max(...scoreArray)
+            
+    } else {
+            return 0
+            
+    }
+
+}
+
+
+module.exports = {
+    createRound,checkParticipantNumber
+};

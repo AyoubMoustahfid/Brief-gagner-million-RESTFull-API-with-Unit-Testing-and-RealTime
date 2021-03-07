@@ -8,8 +8,7 @@ const groupMemberSchema = new mongoose.Schema({
           trim: true
     },
     code: {
-        type: ObjectId,
-        ref: "Code",
+        type: String,
         required: true,
         trim: true,
        

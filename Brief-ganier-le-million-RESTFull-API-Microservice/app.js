@@ -19,6 +19,7 @@ const groupMemberRouter = require('./routers/group_memeberRouter')
 const codeRouter = require('./routers/codeRouter')
 const roundRouter = require('./routers/roundRouter')
 const giftRouter = require('./routers/giftRouter')
+const finalwinnerRouter = require('./routers/final_winnerRouter')
 
 
 mongoose.connect(process.env.DATABASE, {
@@ -36,6 +37,7 @@ app.use('/api/groupMember', groupMemberRouter)
 
 app.use('/api/code', codeRouter)
 app.use('/api/round', roundRouter)
+app.use('/api/finalwinner', finalwinnerRouter)
 
 app.use('/api/gift', giftRouter)
 

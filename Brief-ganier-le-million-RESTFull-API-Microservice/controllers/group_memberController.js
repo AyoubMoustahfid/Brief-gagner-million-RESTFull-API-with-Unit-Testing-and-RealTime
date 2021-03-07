@@ -1,9 +1,21 @@
 const GroupMember = require('../models/group_membersModel')
 
+function generateCode(length) {
+    var result           = '';
+    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var charactersLength = characters.length;
+    for ( var i = 0; i < length; i++ ) {
+       result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+}
+
 
 exports.createGroupMember =  (req, res) => {
 
     const groupMember = new GroupMember(req.body)
+
+    groupMember.code = generateCode(4)
 
     groupMember.save((err, groupMember) =>  {
         
@@ -45,25 +57,44 @@ exports.allGroupMember = (req, res) => {
 
 exports.updateGroupMember= (req, res) => {
 
-    let groupMember = req.groupMember;
+    let code = req.params.codeId;
+    let new_participant = req.body.participant;
 
-    groupMember.participant = req.body.participant;
-    
+    // check if group exist and there is less than 4 particpant 
 
-    groupMember.save((err, groupMember) => {
+    GroupMember.findOne({code : code})
+    .then(group => {
+            if(!group) {
+                return res.status(404).send({
+                    message: "group not found with id " + group_code
+                });            
+            }
+            if(group.participant.length > 3) {
+                    return res.send({
+                        message: "Ops the game is started !"
+                    });            
+            }
+            
 
-        if(err || groupMember.participant.length <= 3) {
-            return res.status(400).json({
-                error: "Group Created, but if you add 4 member in group for start game"
-            })
-        }
-    
-        res.json({
-            groupMember,
-            message: 'Group Member updated '
-        })
+            GroupMember.updateOne(
+                    { code: code },
+                    { $push: { participant: [new_participant] } },
+                    function(err, result) {
+                      if (err) {
+                        res.send(err);
+                      } else {
+                        res.send(result);
+                      }
+                    }
+                  )
 
-    })
+        }).catch(err => {
+           
+            return res.status(500).send({
+                message: "Error retrieving group with id " + code
+            });
+        });
+
 
 }
 

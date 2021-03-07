@@ -13,8 +13,7 @@ const roundSchema = new mongoose.Schema({
     },
     question: {
         type: ObjectId,
-        ref: 'Question',
-        unique: true
+        ref: 'Question'
     },
    participant_answer: {
        type: String,

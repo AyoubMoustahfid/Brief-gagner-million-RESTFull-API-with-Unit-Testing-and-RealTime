@@ -14,7 +14,7 @@ const finalWinnerSchema = new mongoose.Schema({
         trim: true
     },
     participant: {
-        type: Number,
+        type: String,
         required: true,
         trim: true
     },
