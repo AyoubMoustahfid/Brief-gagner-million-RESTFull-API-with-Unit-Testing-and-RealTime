@@ -12,13 +12,10 @@ const GroupMember = require('../models/group_membersModel')
                     if (!group) {
                             res.json({ error: 'gtoup not found' });
                     }
-                    if (group.participant.length < 3) {
+                    if (group.participant.length < 1) {
                             res.json({ error: ' you need 4 players ... ' });
                          
                     }
-
-
-
 
                     let groupmembers = id_group;
                     let question = req.body.question;

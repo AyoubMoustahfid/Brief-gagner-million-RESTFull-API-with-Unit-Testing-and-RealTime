@@ -8,7 +8,7 @@ const router = express.Router()
 
 router.post('/create/:participantId', [requireSignIn, isAuth], createGroupMember)
 router.put('/rejoindre/:codeId', updateGroupMember)
-router.get('/', allGroupMember)
+router.get('/:participantId', [requireSignIn, isAuth], allGroupMember)
 
 router.param('participantId', participantById)
 

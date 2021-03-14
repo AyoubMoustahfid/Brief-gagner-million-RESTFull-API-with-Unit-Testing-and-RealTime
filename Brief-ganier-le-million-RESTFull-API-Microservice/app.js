@@ -25,7 +25,8 @@ const finalwinnerRouter = require('./routers/final_winnerRouter')
 mongoose.connect(process.env.DATABASE, {
     useCreateIndex: true,
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    useFindAndModify: false
 }).then(() => logger.error('db is connect'))
   .catch(err => logger.error('not connect to the database'))
 

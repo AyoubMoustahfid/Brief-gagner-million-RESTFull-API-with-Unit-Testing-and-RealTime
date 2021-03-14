@@ -50,7 +50,7 @@ exports.singin = (req, res) => {
               });
 
             const from = 'Admin';
-            const to =  participant.phone;
+            const to =  "212696396672";
             const text = `Hello ${participant.username} , Email: ${participant.email} votre compte est connected`;
 
             nexmo.message.sendSms(from, to, text);
@@ -89,6 +89,10 @@ exports.validationParticipant = (req, res) => {
                     const text = `Hello ${participant.username} , Email: ${participant.email} votre compte est activé`;
     
                 nexmo.message.sendSms(from, to, text);
+
+                res.json({
+                    message: "your account is valid"
+                })
                }).catch(err => {
                    if(err){
                        return res.status(404).json({
@@ -103,7 +107,6 @@ exports.validationParticipant = (req, res) => {
 
 exports.signout = (req, res) => {
     const deconnect = res.clearCookie("token")
-
     res.json({
         message: 'User is Signout !!'
     })

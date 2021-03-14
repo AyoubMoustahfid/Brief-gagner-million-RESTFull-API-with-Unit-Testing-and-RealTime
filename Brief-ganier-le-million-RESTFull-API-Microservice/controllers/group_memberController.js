@@ -16,6 +16,7 @@ exports.createGroupMember =  (req, res) => {
     const groupMember = new GroupMember(req.body)
 
     groupMember.code = generateCode(4)
+    groupMember.participant = [ req.body.participant ] 
 
     groupMember.save((err, groupMember) =>  {
         
@@ -83,7 +84,7 @@ exports.updateGroupMember= (req, res) => {
                       if (err) {
                         res.send(err);
                       } else {
-                        res.send(result);
+                        res.send(group);
                       }
                     }
                   )
@@ -91,7 +92,7 @@ exports.updateGroupMember= (req, res) => {
         }).catch(err => {
            
             return res.status(500).send({
-                message: "Error retrieving group with id " + code
+                message: "Error retrieving group with id " + code,
             });
         });
 

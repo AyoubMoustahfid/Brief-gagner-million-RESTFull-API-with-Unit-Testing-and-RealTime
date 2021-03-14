@@ -22,3 +22,42 @@ exports.updateOneParticipant = (req, res) => {
         res.json({participant})
     })
 }
+
+
+exports.getAllParticipant = (req, res) => {
+
+    Participant.find().exec((err, participants) => {
+        if(err){
+            return res.status(500).json({
+                error: err
+            })
+        }
+
+        res.json({
+            participants
+        })
+    })    
+}
+
+exports.gerFinalWinner = async (req, res) => {
+
+
+    let idWinner = req.params.idWinner;
+  
+    await Participant.findById(idWinner)
+            .then(winner => {
+                    if (!winner) {
+                            res.json({ error: 'winner not found' });
+                    }
+                  
+                    res.send(winner)
+            }).catch(err => {
+  
+                    return res.status(500).send({
+                            message: "Error retrieving winner " 
+                    });
+            });
+  
+  
+  
+  }
